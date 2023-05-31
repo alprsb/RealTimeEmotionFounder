@@ -41,6 +41,11 @@ def start_camera():
         resized_img = cv2.resize(test_img, (1000, 700))
         cv2.imshow('Yüz ifade analizi', resized_img)
 
+        # Eş zamanlı olarak görüntüyü güncellemek için
+        img_tk = ImageTk.PhotoImage(Image.fromarray(cv2.cvtColor(test_img, cv2.COLOR_BGR2RGB)))
+        image_label.configure(image=img_tk)
+        image_label.image = img_tk
+
         if cv2.waitKey(10) == ord('q'):
             break
     cap.release()
@@ -55,23 +60,7 @@ def stop_camera():
 window = tk.Tk()
 window.title("Kamera Uygulaması")
 window.geometry("800x600")  # Pencere boyutunu ayarlayın
-
-def change_background(color):
-    window.configure(bg=color)
-
-# Frame oluşturma
-frame = tk.Frame(window)
-frame.pack(fill="both", expand=True)
-
-# Arka planı değiştiren düğmeleri ekleyin
-button1 = tk.Button(frame, text="Kirmizi", command=lambda: change_background("red"))
-button1.pack(side="left", padx=10, pady=10)
-
-button2 = tk.Button(frame, text="Mavi", command=lambda: change_background("blue"))
-button2.pack(side="left", padx=10, pady=10)
-
-button3 = tk.Button(frame, text="Yeşil", command=lambda: change_background("green"))
-button3.pack(side="left", padx=10, pady=10)
+window.configure(bg="black")  # Arka planı siyah yapma
 
 image_label = tk.Label(window)
 image_label.pack()
@@ -79,13 +68,17 @@ image_label.pack()
 emotion_label = tk.Label(window, text="Tahmin Edilen Duygu: ")
 emotion_label.pack()
 
+# Frame oluşturma
+button_frame = tk.Frame(window, bg="black")
+button_frame.pack(pady=10)
+
 # Başlat düğmesini ekleyin
-start_button = tk.Button(window, text="Kamerayı Başlat", command=start_camera)
-start_button.pack()
+start_button = tk.Button(button_frame, text="Kamerayı Başlat", command=start_camera)
+start_button.pack(side="left", padx=10)
 
 # Durdur düğmesini ekleyin
-stop_button = tk.Button(window, text="Kamerayı Durdur", command=stop_camera)
-stop_button.pack()
+stop_button = tk.Button(button_frame, text="Kamerayı Durdur", command=stop_camera)
+stop_button.pack(side="right", padx=10)
 
 # Tkinter penceresini çalıştırma
 window.mainloop()
